@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
-import { Lilita_One } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import './globals.css'
 import { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from '@/components/ui/toaster'
 
-const font = Lilita_One({ subsets: ['latin'], weight: '400' })
+const font = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
 	title: 'Github Branch',
@@ -15,8 +17,18 @@ export default function RootLayout({
 	children,
 }: Readonly<{ children: ReactNode }>) {
 	return (
-		<html lang="pt-BR">
-			<body className={cn('antialiased', font.className)}>{children}</body>
+		<html lang="pt-BR" suppressHydrationWarning>
+			<body className={cn('bg-neutral-900 antialiased', font.className)}>
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="dark"
+					enableSystem={false}
+					disableTransitionOnChange
+				>
+					{children}
+					<Toaster />
+				</ThemeProvider>
+			</body>
 		</html>
 	)
 }
