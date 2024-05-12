@@ -107,12 +107,12 @@ export default function Home() {
 					<Button
 						type="button"
 						className={cn(
-							'mt-5 flex w-full select-none flex-row items-center justify-center rounded-md border bg-transparent p-3 text-white hover:bg-transparent',
+							'mt-5 flex w-full select-none flex-row items-center justify-center rounded-md border bg-transparent p-3 hover:bg-transparent',
 							branch && name.programador && name.task
 								? 'cursor-pointer'
 								: 'cursor-not-allowed',
 						)}
-						style={{ borderColor: cor }}
+						style={{ borderColor: cor, color: cor }}
 						onClick={
 							branch && name.programador && name.task
 								? handleCopy
