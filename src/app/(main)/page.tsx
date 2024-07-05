@@ -18,7 +18,11 @@ import { useCallback, useEffect, useState } from 'react'
 export default function Home() {
 	const [branch, setBranch] = useState<string | null>(null)
 	const [cor, setCor] = useState('#fff')
-	const [name, setName] = useState({ programador: '', task: '' })
+	const [name, setName] = useState({
+		programador: '',
+		taskNumber: '',
+		task: '',
+	})
 
 	const { toast } = useToast()
 
@@ -30,9 +34,15 @@ export default function Home() {
 	}, [branchSelected])
 
 	const handleCopy = useCallback(() => {
-		if (!branch && name.programador === '' && name.task === '') return
+		if (
+			!branch &&
+			name.programador &&
+			name.taskNumber === '' &&
+			name.task === ''
+		)
+			return
 
-		const text = `${branch}/${formataBranch(name.programador)}-${formataBranch(name.task)}`
+		const text = `${branch}/${formataBranch(name.programador)}-${name.taskNumber}-${formataBranch(name.task)}`
 
 		if (text.length > 0) {
 			navigator.clipboard
@@ -47,7 +57,7 @@ export default function Home() {
 					console.error(err)
 				})
 		}
-	}, [branch, name.programador, name.task, toast])
+	}, [branch, name.programador, name.task, name.taskNumber, toast])
 
 	return (
 		<section className="flex flex-col space-y-4">
@@ -89,6 +99,20 @@ export default function Home() {
 				/>
 				<span className="text-2xl">-</span>
 				<Input
+					name="task-number"
+					type="number"
+					autoComplete="off"
+					placeholder="Número da task"
+					onChange={(ev) => {
+						const { value } = ev.target
+						setName((prev) => ({
+							...prev,
+							taskNumber: value,
+						}))
+					}}
+				/>
+				<span className="text-2xl">-</span>
+				<Input
 					name="task-name"
 					type="text"
 					autoComplete="off"
@@ -103,12 +127,12 @@ export default function Home() {
 				/>
 			</div>
 			<div className="flex flex-row">
-				{(branch || name.programador || name.task) && (
+				{(branch || name.programador || name.taskNumber || name.task) && (
 					<Button
 						type="button"
 						className={cn(
 							'mt-5 flex w-full select-none flex-row items-center justify-center rounded-md border bg-transparent p-3 hover:bg-transparent',
-							branch && name.programador && name.task
+							branch && name.programador && name.taskNumber && name.task
 								? 'cursor-pointer'
 								: 'cursor-not-allowed',
 						)}
@@ -120,6 +144,7 @@ export default function Home() {
 						}
 					>
 						<p>{branch}</p>/<p>{formataBranch(name.programador)}</p>-
+						<p>{formataBranch(name.taskNumber)}</p>-
 						<p>{formataBranch(name.task)}</p>
 					</Button>
 				)}
